@@ -213,7 +213,7 @@ window.completeSale = function completeSale() {
             });
 
             alert("تم إتمام عملية البيع بنجاح.");
-            printInvoice(); // استدعاء دالة الطباعة بعد إتمام العملية
+            printInvoice(saleId); // استدعاء دالة الطباعة بعد إتمام العملية
             invoiceItems = []; // إعادة ضبط الفاتورة
             updateInvoice();
             loadSales(); // تحميل العمليات السابقة بعد البيع
@@ -223,7 +223,9 @@ window.completeSale = function completeSale() {
 }
 
 // دالة لطباعة الفاتورة
-window.printInvoice = function printInvoice() {
+
+// نسخ الكود
+window.printInvoice = function printInvoice(saleId = null) {
     if (invoiceItems.length === 0) {
         alert("لا يوجد منتجات في الفاتورة.");
         return;
@@ -232,6 +234,12 @@ window.printInvoice = function printInvoice() {
     const printWindow = window.open('', '_blank', 'width=800,height=600');
     printWindow.document.write('<html><head><title>فاتورة البيع</title></head><body>');
     printWindow.document.write('<h1>فاتورة البيع</h1>');
+
+    // إضافة رقم العملية إذا كان متاحًا
+    if (saleId) {
+        printWindow.document.write(`<h3>رقم العملية: ${saleId}</h3>`);
+    }
+
     printWindow.document.write(`<h4>تاريخ العملية: ${new Date().toLocaleString()}</h4>`);
     printWindow.document.write('<table border="1"><tr><th>الاسم</th><th>السعر</th><th>الكمية</th></tr>');
 
@@ -288,7 +296,6 @@ window.loadSales = function loadSales() {
     });
 }
 
-// دالة حذف عملية البيع وإعادة الكميات للمخزن
 // دالة حذف عملية البيع وإعادة الكميات للمخزن
 window.deleteSale = function deleteSale(saleId, items) {
     // استرجاع بيانات عملية البيع لحفظها قبل الحذف
